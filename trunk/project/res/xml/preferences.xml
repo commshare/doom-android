@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+  
+  <CheckBoxPreference
+    android:key="toggle_has_trackball"
+    android:title="@string/trackball"
+    android:summary="@string/trackball_toggle_summary" 
+    android:defaultValue="false"
+  />                        
+  <ListPreference
+   android:key="list_trackball_dampening"
+   android:dependency="toggle_has_trackball"
+   android:title="@string/trackball_dampen"
+   android:summary="@string/trackball_dampen_summary"
+   android:entries="@array/trackball_dampening"
+   android:entryValues="@array/trackball_dampening_values"
+   android:dialogTitle="@string/trackball_dampen"
+   android:defaultValue="0"
+  />
+  
+  <CheckBoxPreference
+    android:key="toggle_has_arrowkeys"
+    android:title="@string/arrowkeys"
+    android:summary="@string/arrowkeys_toggle_summary" 
+    android:defaultValue="true"
+  />
+  <CheckBoxPreference
+    android:key="toggle_use_accelerometer_as_arrowkeys"
+    android:title="@string/accelerometer"
+    android:summary="@string/accelerometer_toggle_summary" 
+    android:defaultValue="true"
+  />
+     <ListPreference
+   android:key="accelerometer_sensitive"
+   android:dependency="toggle_use_accelerometer_as_arrowkeys"
+   android:title="@string/accelerometer_sensitive"
+   android:summary="@string/accelerometer_sensitive_summary"
+   android:entries="@array/trackball_dampening"
+   android:entryValues="@array/trackball_dampening_values"
+   android:dialogTitle="@string/accelerometer_sensitive"
+   android:defaultValue="3"
+  />
+
+  <CheckBoxPreference
+    android:key="toggle_use_touchscreen"
+    android:title="@string/touchscreen"
+    android:summary="@string/touchscreen_toggle_summary" 
+    android:defaultValue="true"
+  />
+                          
+  <ListPreference
+   android:key="list_touchscreen_size"
+   android:dependency="toggle_use_touchscreen"
+   android:title="@string/touchscreen_icon_size"
+   android:summary="@string/touchscreen_icon_size_summary"
+   android:entries="@array/touchscreen_icon_size"
+   android:entryValues="@array/touchscreen_icon_size_values"
+   android:dialogTitle="@string/touchscreen_icon_size"
+   android:defaultValue="2"
+  />
+             
+</PreferenceScreen>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">毁灭战士</string>
+    <string name="exit">退出</string>
+    <string name="quick_start">开始</string>
+    <string name="options">选项</string>
+    <string name="help">帮助</string>
+    <string name="trackball">轨迹球</string>
+    <string name="trackball_toggle_summary">如果手机有轨迹球,设置该选项</string>
+    <string name="trackball_dampen">轨迹球灵敏度</string>
+    <string name="trackball_dampen_summary">设置轨迹球灵敏度</string>
+    <string name="arrowkeys">方向键</string>
+    <string name="arrowkeys_toggle_summary">如果手机有方向键,设置该选项</string>
+    <string name="accelerometer">使用速度感应做为方向键</string>
+    <string name="accelerometer_toggle_summary">如果手机支持速度感应,并且你想用它来控制,设置该选项</string>
+    <string name="touchscreen">使用触摸屏 </string>
+    <string name="touchscreen_toggle_summary">使用触摸屏图标来控制</string>
+    <string name="touchscreen_icon_size">触摸屏的图标大小</string>
+    <string name="touchscreen_icon_size_summary">选择触摸屏图标的大小</string>
+    <string name="help_content">如果您的手机没有键盘,请设置用触摸屏来控制,如果手机够给力有键盘,使用W,A,S,D 来移动, J来开火, 空格来开门</string>
+</resources>
