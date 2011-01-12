@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string-array name="trackball_dampening">
+    <item>Slow</item>  
+    <item>Medium</item>
+    <item>Fast</item>
+  </string-array>
+  
+ <string-array name="trackball_dampening_values">
+    
+    <item>1</item>
+    <item>3</item>
+    <item>5</item>
+  </string-array>
+  
+  <string-array name="touchscreen_icon_size">
+    <item>Big</item>
+    <item>Medium</item>
+    <item>Small</item>
+    <item>Tiny</item>
+  </string-array>
+
+  <string-array name="touchscreen_icon_size_values">
+    <item>0</item>
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+  </string-array>
+
+ 
+</resources>
