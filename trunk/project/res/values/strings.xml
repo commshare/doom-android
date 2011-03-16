@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Doom</string>
+    <string name="app_name">TNT Doom</string>
     <string name="exit">Exit</string>
     <string name="quick_start">Start</string>
     <string name="options">Options</string>
@@ -20,7 +20,7 @@
     <string name="touchscreen_toggle_summary">Set to use Touchscreen Keyboard</string>
     <string name="touchscreen_icon_size">Touchscreen icon size</string>
     <string name="touchscreen_icon_size_summary">choose touchscreen icon size</string>
-    <string name="help_content">the four icon means:fire, map, change weapon and open door, open door icon also used for OK. Use keyboard if you have, W,A,S,D for move, J for fire, Space for open door</string>
+    <string name="help_content">the four icon means:fire, map, change weapon and open door, open door icon also used for return. \nUse keyboard if you have, W,A,S,D for move,Q,E for strafe left and right J for fire, Space for open door</string>
 	<string name="whats_new_ticker">Add new Feature:1.support drag screen to change orientation 2.Now you can use Key of volume up/down and camera to control direction, search key for fire 3. fix bug:guns keep switching randomly.</string>
 
 </resources>
