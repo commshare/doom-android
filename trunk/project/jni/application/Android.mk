@@ -9,7 +9,7 @@ ifneq ($(APPLICATION_SUBDIRS_BUILD),)
 APP_SUBDIRS := $(APPLICATION_SUBDIRS_BUILD)
 endif
 
-LOCAL_CFLAGS :=  
+LOCAL_CFLAGS :=  -DOGG_MUSIC -DOGG_USE_TREMOR -DHAVE_LIBSDL_MIXER
 
 ifeq ($(CRYSTAX_TOOLCHAIN),)
 # Paths should be on newline so launchConfigure.sh will work properly

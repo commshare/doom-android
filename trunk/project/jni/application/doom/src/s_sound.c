@@ -486,19 +486,23 @@ void S_ChangeMusic(int musicnum, int looping)
     {
       char namebuf[9];
       sprintf(namebuf, "d_%s", music->name);
+	  logg(namebuf);
       music->lumpnum = W_GetNumForName(namebuf);
     }
 
   music_file_failed = 1;
 
   // proff_fs - only load when from IWAD
-  if (lumpinfo[music->lumpnum].source == source_iwad)
+  if (/*lumpinfo[music->lumpnum].source == source_iwad*/1)
     {
       // cournia - check to see if we can play a higher quality music file
       //           rather than the default MIDI
+      logg("start music:");
       music_filename = I_FindFile(S_music_files[musicnum], "");
       if (music_filename)
         {
+          logg("file name:");
+		  logg(music_filename);
           music_file_failed = I_RegisterMusic(music_filename, music);
           free(music_filename);
         }
