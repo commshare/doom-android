@@ -404,8 +404,8 @@ void SDL_ANDROID_reset_arrow_key() {
   SDL_keysym keysym;
   SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(A), &keysym) );
   SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(S), &keysym) );
-  SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(D), &keysym) );
-  SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(W), &keysym) );
+  SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(Q), &keysym) );
+  SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(E), &keysym) );
 }
 
 int SDL_ANDROID_get_number(int x, int y) {
@@ -417,6 +417,7 @@ int SDL_ANDROID_get_number(int x, int y) {
   }
   return num;
 }
+
 int SDL_ANDROID_processTouchscreenKeyboard(int x, int y, int action, int pointerId)
 {
 	int i;
@@ -633,12 +634,12 @@ int SDL_ANDROID_processTouchscreenKeyboard(int x, int y, int action, int pointer
          //arrows_move.y = arrows.y+arrows.h;
        }
        if( i & ARROW_LEFT ) {
-         SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(A), &keysym) );
+         SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(Q), &keysym) );
          //arrows_move.x = arrows.x;
        }
        if( i & ARROW_RIGHT ) {
 
-         SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(D), &keysym) );
+         SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(E), &keysym) );
          //arrows_move.x = arrows.x+arrows.w-arrows_move.w/2;
        }
        oldArrows = i;
