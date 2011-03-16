@@ -18,3 +18,7 @@ How to compile Doom
 	android update project -p .
 
 2.run ./debug.sh to generate a debug version doom or run ./release.sh to generate a release version doom
+
+Other
+==============================================
+the change_package_name.sh is used for change the package name of this project
