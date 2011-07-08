@@ -10,6 +10,8 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 
+import tk.niuzb.game.Keycodes;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -22,25 +24,38 @@ import android.widget.TextView;
 import java.lang.Thread;
 import java.util.concurrent.locks.ReentrantLock;
 import android.os.Build;
-
+import android.util.Log;
 	abstract class DifferentTouchInput
 	{
+	    
 		public static DifferentTouchInput getInstance()
 		{
-			if (Integer.parseInt(Build.VERSION.SDK) <= 4)
-				return SingleTouchInput.Holder.sInstance;
-			else
-				return MultiTouchInput.Holder.sInstance;
+			if ((Build.VERSION.SDK_INT) <= 4){
+				return SingleTouchInput.Holder.sInstance;}
+			else{
+                Log.v("doom", "multi touch");
+				return MultiTouchInput.Holder.sInstance;}
 		}
 		public abstract void process(final MotionEvent event);
 		private static class SingleTouchInput extends DifferentTouchInput
 		{
+		    private long mLastTouchTime = 0L;
 			private static class Holder 
 			{
 				private static final SingleTouchInput sInstance = new SingleTouchInput();
 			}
 			public void process(final MotionEvent event)
 			{
+			     final long time = System.currentTimeMillis();
+	        if (event.getAction() == MotionEvent.ACTION_MOVE && time - 
+mLastTouchTime < 32) {
+		        // Sleep so that the main thread doesn't get flooded with UI events.
+		      return;
+               
+	        }
+	        mLastTouchTime = time;
+
+            
 				int action = -1;
 				if( event.getAction() == MotionEvent.ACTION_DOWN )
 					action = 0;
@@ -56,21 +71,42 @@ import android.os.Build;
 		}
 		private static class MultiTouchInput extends DifferentTouchInput
 		{
+		
+            private long mLastTouchTime = 0L;
 			private static class Holder 
 			{
 				private static final MultiTouchInput sInstance = new MultiTouchInput();
 			}
 			public void process(final MotionEvent event)
 			{
+
+                 final long time = System.currentTimeMillis();
+                 if (event.getAction() == MotionEvent.ACTION_MOVE && time - 
+                mLastTouchTime < 32) {
+                    // Sleep so that the main thread doesn't get flooded with UI events.
+                   return;
+                }
+                mLastTouchTime = time;     
+
+            
 				for( int i = 0; i < event.getPointerCount(); i++ )
 				{
 					int action = -1;
-					if( event.getAction() == MotionEvent.ACTION_DOWN )
-						action = 0;
-					if( event.getAction() == MotionEvent.ACTION_UP )
-						action = 1;
-					if( event.getAction() == MotionEvent.ACTION_MOVE )
-						action = 2;
+				
+                    switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_DOWN:
+                    case MotionEvent.ACTION_POINTER_DOWN:
+                            action = 0;
+                            break;
+                     case MotionEvent.ACTION_UP:
+                     case MotionEvent.ACTION_POINTER_UP:     
+                        action = 1;
+                        break;
+                     case MotionEvent.ACTION_MOVE:
+                        action = 2;
+                        break;
+                    }
+
 					if ( action >= 0 )
 						DemoGLSurfaceView.nativeMouse( (int)event.getX(i), 
 														(int)event.getY(i), 
@@ -114,7 +150,7 @@ class DemoRenderer extends GLSurfaceView_SDL.Renderer {
 		// Tweak video thread priority, if user selected big audio buffer
 		if(Globals.AudioBufferConfig >= 2)
 			Thread.currentThread().setPriority( (Thread.NORM_PRIORITY + Thread.MIN_PRIORITY) / 2 ); // Lower than normal
-		nativeInit(); // Calls main() and never returns, hehe - we'll call eglSwapBuffers() from native code
+		nativeInit("-iwad "+Globals.wadFile); // Calls main() and never returns, hehe - we'll call eglSwapBuffers() from native code
 		System.exit(0); // The main() returns here - I don't bother with deinit stuff, just terminate process
 	}
 
@@ -132,7 +168,7 @@ class DemoRenderer extends GLSurfaceView_SDL.Renderer {
 	};
 
 	private native void nativeInitJavaCallbacks();
-	private native void nativeInit();
+	private native void nativeInit(String CommandLine);
 	private native void nativeResize(int w, int h);
 	private native void nativeDone();
 
@@ -189,13 +225,21 @@ class DemoGLSurfaceView extends GLSurfaceView_SDL {
 
 	@Override
 	public boolean onKeyDown(int keyCode, final KeyEvent event) {
-		 nativeKey( keyCode, 1 );
+	   if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN ||
+        keyCode == KeyEvent.KEYCODE_VOLUME_UP){
+            return super.onKeyDown(keyCode, event);
+       }
+		 nativeKey( Globals.TranslateScancode(keyCode, true), 1 );
 		 return true;
 	 }
 	
 	@Override
 	public boolean onKeyUp(int keyCode, final KeyEvent event) {
-		 nativeKey( keyCode, 0 );
+	    if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN ||
+        keyCode == KeyEvent.KEYCODE_VOLUME_UP){
+            return super.onKeyDown(keyCode, event);
+       }
+		 nativeKey( Globals.TranslateScancode(keyCode, false), 0 );
 		 return true;
 	 }
 
