@@ -2,21 +2,22 @@
 package com.xianle.doomtnt;
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.MotionEvent;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.content.res.Configuration;
 
 
 public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		Globals.wadFile = this.getIntent().getStringExtra("wad");
+		Log.v("Doom", "wad file"+Globals.wadFile);
 		// fullscreen mode
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -101,6 +102,12 @@ public class MainActivity extends Activity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, final KeyEvent event) {
+	
+        if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN ||
+         keyCode == KeyEvent.KEYCODE_VOLUME_UP) &&
+            !Globals.keyBindingUseVolumeButton()) {
+             return super.onKeyDown(keyCode, event);
+        }
 		// Overrides Back key to use in our app
 		if( mGLView != null )
 			 mGLView.nativeKey( keyCode, 1 );
@@ -117,6 +124,12 @@ public class MainActivity extends Activity {
 	
 	@Override
 	public boolean onKeyUp(int keyCode, final KeyEvent event) {
+	
+        if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN ||
+         keyCode == KeyEvent.KEYCODE_VOLUME_UP) &&
+            !Globals.keyBindingUseVolumeButton()) {
+             return super.onKeyDown(keyCode, event);
+        }
 		 if( mGLView != null )
 			 mGLView.nativeKey( keyCode, 0 );
 		 return true;
