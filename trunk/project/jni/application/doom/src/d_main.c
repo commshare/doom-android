@@ -126,12 +126,12 @@ char    basesavegame[PATH_MAX+1];  // killough 2/16/98: savegame directory
 //jff 4/19/98 list of standard IWAD names
 const char *const standard_iwads[]=
 {
+  "doom1.wad",
   "doom2f.wad",
   "doom2.wad",
   "plutonia.wad",
   "tnt.wad",
   "doom.wad",
-  "doom1.wad",
   "doomu.wad", /* CPhipps - alow doomu.wad */
   "freedoom.wad", /* wart@kobold.org:  added freedoom for Fedora Extras */
 };
@@ -1559,7 +1559,7 @@ static void D_DoomMainSetup(void)
 
   //jff 9/3/98 use logical output routine
   lprintf(LO_INFO,"S_Init: Setting up sound.\n");
-  S_Init(snd_SfxVolume /* *8 */, snd_MusicVolume /* *8*/ );
+  S_Init(snd_SfxVolume /* *8 */, 15 /* *8*/ );
 
   //jff 9/3/98 use logical output routine
   lprintf(LO_INFO,"HU_Init: Setting up heads up display.\n");

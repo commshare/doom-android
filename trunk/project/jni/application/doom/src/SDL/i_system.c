@@ -344,17 +344,12 @@ char* I_FindFile(const char* wfname, const char* ext)
     const char *env; // environment variable
     const char *(*func)(void); // for I_DoomExeDir
   } search[] = {
-    {"/sdcard/doom"},
+    {"/sdcard/doom/music"},
+	{DOOMWADDIR}, // build-time configured DOOMWADDIR
     {NULL}, // current working directory
     {NULL, NULL, "DOOMWADDIR"}, // run-time $DOOMWADDIR
-    {DOOMWADDIR}, // build-time configured DOOMWADDIR
-    {NULL, "doom", "HOME"}, // ~/doom
-    {NULL, NULL, "HOME"}, // ~
+    {DOOMWADDIR,"wad"},
     {NULL, NULL, NULL, I_DoomExeDir}, // config directory
-    {"/usr/local/share/games/doom"},
-    {"/usr/share/games/doom"},
-    {"/usr/local/share/doom"},
-    {"/usr/share/doom"},
   };
 
   int   i;
@@ -381,10 +376,13 @@ char* I_FindFile(const char* wfname, const char* ext)
     sprintf(p, "%s%s%s%s%s", d ? d : "", (d && !HasTrailingSlash(d)) ? "/" : "",
                              s ? s : "", (s && !HasTrailingSlash(s)) ? "/" : "",
                              wfname);
-
-    if (access(p,F_OK))
+	logg(p);
+    if (access(p,F_OK)){
+	 
       strcat(p, ext);
+	 }
     if (!access(p,F_OK)) {
+	
       lprintf(LO_INFO, " found %s\n", p);
       return p;
     }

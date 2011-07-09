@@ -58,7 +58,7 @@
 
 
  void logg(char* component){
-  __android_log_print(ANDROID_LOG_INFO, "Doom", " %s ",component);
+  __android_log_print(ANDROID_LOG_INFO, "doom", " %s ",component);
 }
 
 int cons_error_mask = -1-LO_INFO; /* all but LO_INFO when redir'd */

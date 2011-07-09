@@ -139,7 +139,6 @@ static void W_AddFile(wadfile_info_t *wadfile)
   // open the file and add to directory
 
   wadfile->handle = open(wadfile->name,O_RDONLY | O_BINARY);
-
 #ifdef HAVE_NET
   if (wadfile->handle == -1 && D_NetGetWad(wadfile->name)) // CPhipps
     wadfile->handle = open(wadfile->name,O_RDONLY | O_BINARY);
@@ -151,12 +150,12 @@ static void W_AddFile(wadfile_info_t *wadfile)
 	         (strcasecmp(wadfile->name+strlen(wadfile->name)-4 , ".lmp" ) &&
 	          strcasecmp(wadfile->name+strlen(wadfile->name)-4 , ".gwa" ) )
          )
-	I_Error("W_AddFile: couldn't open %s",wadfile->name);
+	I_Error("W_AddFile:xx couldn't open  %s",wadfile->name);
       return;
     }
 
   //jff 8/3/98 use logical output routine
-  lprintf (LO_INFO," adding %s\n",wadfile->name);
+  lprintf (LO_INFO,"W_AddFile adding %s\n",wadfile->name);
   startlump = numlumps;
 
   if (  strlen(wadfile->name)<=4 || 

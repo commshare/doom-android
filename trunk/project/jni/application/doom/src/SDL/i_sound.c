@@ -67,7 +67,7 @@
 #include "doomtype.h"
 
 #include "d_main.h"
-
+#include <android/log.h>
 // The number of internal mixing channels,
 //  the samples calculated for each mixing step,
 //  the size of the 16bit, 2 hardware channel (stereo)
@@ -504,7 +504,20 @@ void I_InitSound(void)
 
   // Secure and configure sound device first.
   lprintf(LO_INFO,"I_InitSound: ");
-
+  //aded by nizub
+   if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0) {
+      printf("Couldn't initialize SDL audio subsystem: %s\n", SDL_GetError());
+      __android_log_print(ANDROID_LOG_ERROR, "doom", "Couldn't initialize SDL audio subsystem: %s", SDL_GetError());
+      exit(1);
+   }    
+   
+   int flags=MIX_INIT_OGG;
+   int initted=Mix_Init(flags);
+   if(initted&flags != flags) {
+   logg("Mix_Init: Failed to init required ogg and mod support!\n");
+   __android_log_print(ANDROID_LOG_ERROR, "doom","Mix_Init: %s\n", Mix_GetError());
+   // handle error
+   }
   /* Initialize variables */
   audio_rate = snd_samplerate;
 #if ( SDL_BYTEORDER == SDL_BIG_ENDIAN )
