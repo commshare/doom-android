@@ -93,7 +93,7 @@ JAVA_EXPORT_NAME(DemoGLSurfaceView_nativeMouse) ( JNIEnv*  env, jobject  thiz, j
 	{
 		SDL_keysym keysym;
 		if( action != MOUSE_MOVE )
-			SDL_SendKeyboardKey( action == MOUSE_DOWN ? SDL_PRESSED : SDL_RELEASED, GetKeysym(SDL_KEY(SDL_KEY_VAL(SDL_ANDROID_KEYCODE_0)) ,&keysym) );
+			SDL_SendKeyboardKey( action == MOUSE_DOWN ? SDL_PRESSED : SDL_RELEASED, GetKeysym(SDL_KEY(SPACE) ,&keysym) );
 		return;
 	}
 
@@ -115,9 +115,9 @@ JAVA_EXPORT_NAME(DemoGLSurfaceView_nativeMouse) ( JNIEnv*  env, jobject  thiz, j
 		SDL_SendMouseMotion(NULL, 0, x, y);
 #else
 {
-
+//niuzb doesn't support other touch screnn event
 //__android_log_print(ANDROID_LOG_INFO, "libSDL", "MOUSE_MOVE: x%d y %d ", x, y);
-		SDL_PrivateMouseMotion(0, 0, x, y);
+		//SDL_PrivateMouseMotion(0, 0, x, y);
 }
 #endif
 }

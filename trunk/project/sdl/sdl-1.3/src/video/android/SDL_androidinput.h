@@ -62,7 +62,7 @@ extern SDLKey SDL_android_keymap[KEYCODE_LAST+1];
 static inline SDL_scancode TranslateKey(int scancode, SDL_keysym *keysym)
 {
 	if ( scancode >= SDL_arraysize(SDL_android_keymap) )
-		scancode = KEYCODE_UNKNOWN;
+		return scancode;//scancode = KEYCODE_UNKNOWN;
 	return SDL_android_keymap[scancode];
 }
 
@@ -148,8 +148,9 @@ static inline SDL_keysym *TranslateKey(int scancode, SDL_keysym *keysym)
 
 static inline SDL_keysym *GetKeysym(SDLKey scancode, SDL_keysym *keysym)
 {
+	//niuzb we use this. for 1.2
 	/* Sanity check */
-
+	
 	/* Set the keysym information */
 	keysym->scancode = scancode;
 	keysym->sym = scancode;
