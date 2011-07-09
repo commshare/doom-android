@@ -7,7 +7,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := sdl_mixer
 
 LOCAL_CFLAGS := -I$(LOCAL_PATH) -I$(LOCAL_PATH)/.. -I$(LOCAL_PATH)/../sdl/include -I$(LOCAL_PATH)/../mad \
-					-DWAV_MUSIC -DOGG_USE_TREMOR -DOGG_MUSIC  -DMOD_MUSIC -I$(LOCAL_PATH)/../mikmod/include
+					-DWAV_MUSIC -DOGG_MUSIC -DOGG_USE_TREMOR  -I$(LOCAL_PATH)/../mikmod/include 
 
 LOCAL_CPP_EXTENSION := .cpp
 
