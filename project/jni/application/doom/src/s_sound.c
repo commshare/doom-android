@@ -497,12 +497,16 @@ void S_ChangeMusic(int musicnum, int looping)
     {
       // cournia - check to see if we can play a higher quality music file
       //           rather than the default MIDI
+      char *p;
       logg("start music:");
+	  if((p = strrchr(S_music_files[musicnum], '\"')) != NULL) {
+		logg("find a doutble quate");
+	  	*p = '\0';	
+	  }
       music_filename = I_FindFile(S_music_files[musicnum], "");
       if (music_filename)
         {
-          logg("file name:");
-		  logg(music_filename);
+        
           music_file_failed = I_RegisterMusic(music_filename, music);
           free(music_filename);
         }
