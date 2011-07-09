@@ -23,28 +23,55 @@
 #define JAVA_EXPORT_NAME1(name,package) JAVA_EXPORT_NAME2(name,package)
 #define JAVA_EXPORT_NAME(name) JAVA_EXPORT_NAME1(name,SDL_JAVA_PACKAGE_PATH)
 
+static int argc = 0;
+static char ** argv = NULL;
 
 static int isSdcardUsed = 0;
 
 extern C_LINKAGE void
-JAVA_EXPORT_NAME(DemoRenderer_nativeInit) ( JNIEnv*  env, jobject thiz )
+JAVA_EXPORT_NAME(DemoRenderer_nativeInit) ( JNIEnv*  env, jobject thiz , jstring cmdline)
 {
-	int argc = 1;
-	char * argv[] = { "sdl" };
 	char curdir[512];
-	if( isSdcardUsed )
-	{
-		strcpy(curdir, "/sdcard/app-data/");
-		strcat(curdir, SDL_CURDIR_PATH);
-	}
-	else
-	{
-		strcpy(curdir, "/data/data/");
-		strcat(curdir, SDL_CURDIR_PATH);
-		strcat(curdir, "/files");
-	}
+	const jbyte *jstr;
+	const char * str = "sdl";
+	int i = 0;
+
+	strcpy(curdir, "/sdcard/doom/");
 	chdir(curdir);
 	setenv("HOME", curdir, 1);
+	jstr = (*env)->GetStringUTFChars(env, cmdline, NULL);
+	if (jstr != NULL && strlen(jstr) > 0)
+		str = jstr;
+	{
+			char * str1, * str2;
+			str1 = strdup(str);
+			str2 = str1;
+			while(str2)
+			{
+				argc++;
+				str2 = strchr(str2, ' ');
+				if(!str2)
+					break;
+				str2++;
+			}
+	
+			argv = (char **)malloc(argc*sizeof(char *));
+			str2 = str1;
+			while(str2)
+			{
+				argv[i] = str2;
+				i++;
+				str2 = strchr(str2, ' ');
+				if(str2)
+					*str2 = 0;
+				else
+					break;
+				str2++;
+			}
+		}
+	(*env)->ReleaseStringUTFChars(env, cmdline, jstr);
+	for( i = 0; i < argc; i++ )
+		__android_log_print(ANDROID_LOG_INFO, "libSDL", "param %d = \"%s\"", i, argv[i]);
 
 	main( argc, argv );
 };
