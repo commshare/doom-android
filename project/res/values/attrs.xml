@@ -1,11 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
-<declare-styleable name="com.admob.android.ads.AdView">
-<attr name="backgroundColor" format="color" />
-<attr name="primaryTextColor" format="color" />
-<attr name="secondaryTextColor" format="color" />
-<attr name="keywords" format="string" />
-<attr name="refreshInterval" format="integer" />
-</declare-styleable>
+	<declare-styleable name = "SliderPreference">
+	 	<attr name="minText" format = "string"/>
+		<attr name="maxText" format = "string"/>
+	</declare-styleable>
+	
+	<declare-styleable name = "KeyConfigPreference">
+	 	<attr name="leftKey" format = "string"/>
+		<attr name="rightKey" format = "string"/>
+		<attr name="upKey" format = "string"/>
+		<attr name="downKey" format = "string"/>
+		<attr name="fireKey" format = "string"/>
+		<attr name="doorKey" format = "string"/>
+		<attr name="tleftKey" format = "string"/>
+		<attr name="trightKey" format = "string"/>
+	</declare-styleable>
 </resources>
-

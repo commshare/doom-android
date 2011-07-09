@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+	<ScrollView android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:orientation="horizontal" android:layout_height="fill_parent"
+			android:layout_width="wrap_content" android:layout_gravity="center_horizontal"
+			android:paddingLeft="5dp" android:paddingRight="5dp">
+
+			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				android:orientation="vertical" android:layout_height="fill_parent"
+				android:paddingTop="20dp" android:layout_width="wrap_content">
+				<!-- left -->
+				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+					android:orientation="horizontal" android:layout_height="wrap_content"
+					android:layout_gravity="center_horizontal" android:layout_width="wrap_content"
+					android:paddingBottom="10dp">
+					<TextView android:layout_height="wrap_content"
+						android:layout_gravity="center_vertical" android:text="Left"
+						android:layout_width="65dp" />
+					<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+						android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+						android:gravity="center" android:background="@drawable/key_config_border"
+						android:id="@+id/left_border" android:layout_width="120dp">
+						<TextView android:layout_height="wrap_content"
+							android:layout_gravity="center" android:layout_width="wrap_content"
+							android:text="A" android:id="@+id/key_left" />
+					</LinearLayout>
+				</LinearLayout>
+				<!-- up -->
+				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+					android:orientation="horizontal" android:layout_height="wrap_content"
+					android:layout_gravity="center_horizontal" android:layout_width="wrap_content"
+					android:paddingBottom="10dp">
+					<TextView android:layout_height="wrap_content"
+						android:layout_gravity="center_vertical" android:text="Up"
+						 android:layout_width="65dp" />
+					<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+						android:layout_height="wrap_content" android:background="@drawable/key_config_border"
+						android:layout_gravity="center_vertical" android:gravity="center"
+						android:id="@+id/up_border" android:layout_width="120dp">
+						<TextView android:layout_height="wrap_content"
+							android:layout_gravity="center" android:layout_width="wrap_content"
+							android:text="A" android:id="@+id/key_up" />
+					</LinearLayout>
+				</LinearLayout>
+					<!--  turn left -->
+				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+					android:orientation="horizontal" android:layout_height="wrap_content"
+					android:layout_gravity="center_horizontal" android:layout_width="wrap_content"
+					android:paddingBottom="10dp">
+					<TextView android:layout_height="wrap_content"
+						android:layout_gravity="center_vertical" android:text="Turn Left"
+						 android:layout_width="65dp" />
+					<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+						android:layout_height="wrap_content" android:background="@drawable/key_config_border"
+						android:layout_gravity="center_vertical" android:gravity="center"
+						android:id="@+id/turnleft_border" android:layout_width="120dp">
+						<TextView android:layout_height="wrap_content"
+							android:layout_gravity="center" android:layout_width="wrap_content"
+							android:text="space" android:id="@+id/key_turnleft" />
+					</LinearLayout>
+				</LinearLayout><!-- turn right -->
+				<!-- fire -->
+				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+					android:orientation="horizontal" android:layout_height="wrap_content"
+					android:layout_gravity="center_horizontal" android:layout_width="wrap_content"
+					android:paddingBottom="10dp">
+					<TextView android:layout_height="wrap_content"
+						android:layout_gravity="center_vertical" android:text="Fire"
+						android:layout_width="65dp" />
+					<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+						android:layout_height="wrap_content" android:background="@drawable/key_config_border"
+						android:layout_gravity="center_vertical" android:gravity="center"
+						android:id="@+id/fire_border" android:layout_width="120dp">
+						<TextView android:layout_height="wrap_content"
+							android:layout_gravity="center" android:layout_width="wrap_content"
+							android:text="j" android:id="@+id/key_fire" />
+					</LinearLayout>
+				</LinearLayout>
+				
+			</LinearLayout><!-- first column end -->
+			
+			<!-- sencond culumn start -->
+			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				android:orientation="vertical" android:layout_height="fill_parent"
+				android:paddingTop="20dp" android:layout_width="wrap_content">
+					<!-- right -->
+				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+					android:orientation="horizontal" android:layout_height="wrap_content"
+					android:layout_gravity="center_horizontal" android:layout_width="wrap_content"
+					android:paddingBottom="10dp">
+					<TextView android:layout_height="wrap_content"
+						android:layout_gravity="center_vertical" android:text="Right"
+						android:layout_marginLeft="65dp" android:layout_width="65dp" />
+					<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+						android:layout_height="wrap_content" android:background="@drawable/key_config_border"
+						android:layout_gravity="center_vertical" android:gravity="center"
+						android:id="@+id/right_border" android:layout_width="120dp">
+						<TextView android:layout_height="wrap_content"
+							android:layout_gravity="center" android:layout_width="wrap_content"
+							android:text="d" android:id="@+id/key_right" />
+					</LinearLayout>
+				</LinearLayout>
+			
+				<!-- down -->
+				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+					android:orientation="horizontal" android:layout_height="wrap_content"
+					android:layout_gravity="center_horizontal" android:layout_width="wrap_content"
+					android:paddingBottom="10dp">
+					<TextView android:layout_height="wrap_content"
+						android:layout_gravity="center_vertical" android:text="Down"
+						android:layout_marginLeft="65dp" android:layout_width="65dp" />
+					<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+						android:layout_height="wrap_content" android:background="@drawable/key_config_border"
+						android:layout_gravity="center_vertical" android:gravity="center"
+						android:id="@+id/down_border" android:layout_width="120dp">
+						<TextView android:layout_height="wrap_content"
+							android:layout_gravity="center" android:layout_width="wrap_content"
+							android:text="s" android:id="@+id/key_down" />
+					</LinearLayout>
+				</LinearLayout>
+					<!--  turn right -->
+				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+					android:orientation="horizontal" android:layout_height="wrap_content"
+					android:layout_gravity="center_horizontal" android:layout_width="wrap_content"
+					android:paddingBottom="10dp">
+					<TextView android:layout_height="wrap_content"
+						android:layout_gravity="center_vertical" android:text="Turn Right"
+						android:layout_marginLeft="65dp" android:layout_width="65dp" />
+					<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+						android:layout_height="wrap_content" android:background="@drawable/key_config_border"
+						android:layout_gravity="center_vertical" android:gravity="center"
+						android:id="@+id/turnright_border" android:layout_width="120dp">
+						<TextView android:layout_height="wrap_content"
+							android:layout_gravity="center" android:layout_width="wrap_content"
+							android:text="space" android:id="@+id/key_turnright" />
+					</LinearLayout>
+				</LinearLayout><!-- turn right -->
+				<!--  start door -->
+				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+					android:orientation="horizontal" android:layout_height="wrap_content"
+					android:layout_gravity="center_horizontal" android:layout_width="wrap_content"
+					android:paddingBottom="10dp">
+					<TextView android:layout_height="wrap_content"
+						android:layout_gravity="center_vertical" android:text="Weapon"
+						 android:layout_marginLeft="65dp" android:layout_width="65dp" />
+					<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+						android:layout_height="wrap_content" android:background="@drawable/key_config_border"
+						android:layout_gravity="center_vertical" android:gravity="center"
+						android:id="@+id/door_border" android:layout_width="120dp">
+						<TextView android:layout_height="wrap_content"
+							android:layout_gravity="center" android:layout_width="wrap_content"
+							android:text="space" android:id="@+id/key_door" />
+					</LinearLayout>
+				</LinearLayout><!-- end door -->
+				
+			</LinearLayout>
+		</LinearLayout>
+	</ScrollView>
+</FrameLayout>
+	

@@ -1,63 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-  xmlns:android="http://schemas.android.com/apk/res/android">
-  
-  <CheckBoxPreference
-    android:key="toggle_has_trackball"
-    android:title="@string/trackball"
-    android:summary="@string/trackball_toggle_summary" 
-    android:defaultValue="false"
-  />                        
-  <ListPreference
-   android:key="list_trackball_dampening"
-   android:dependency="toggle_has_trackball"
-   android:title="@string/trackball_dampen"
-   android:summary="@string/trackball_dampen_summary"
-   android:entries="@array/trackball_dampening"
-   android:entryValues="@array/trackball_dampening_values"
-   android:dialogTitle="@string/trackball_dampen"
-   android:defaultValue="0"
-  />
-  
-  <CheckBoxPreference
-    android:key="toggle_has_arrowkeys"
-    android:title="@string/arrowkeys"
-    android:summary="@string/arrowkeys_toggle_summary" 
-    android:defaultValue="true"
-  />
-  <CheckBoxPreference
-    android:key="toggle_use_accelerometer_as_arrowkeys"
-    android:title="@string/accelerometer"
-    android:summary="@string/accelerometer_toggle_summary" 
-    android:defaultValue="true"
-  />
-     <ListPreference
-   android:key="accelerometer_sensitive"
-   android:dependency="toggle_use_accelerometer_as_arrowkeys"
-   android:title="@string/accelerometer_sensitive"
-   android:summary="@string/accelerometer_sensitive_summary"
-   android:entries="@array/trackball_dampening"
-   android:entryValues="@array/trackball_dampening_values"
-   android:dialogTitle="@string/accelerometer_sensitive"
-   android:defaultValue="3"
-  />
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:replica="http://schemas.android.com/apk/res/com.xianle.doomtnt">
+	<PreferenceCategory android:title="Touchscreen Settings">
+			<CheckBoxPreference android:key="toggle_use_touchscreen"
+				android:title="@string/controls_touch" android:summary="Use touchscreen icon to control the game"
+				android:defaultValue="true" />
 
-  <CheckBoxPreference
-    android:key="toggle_use_touchscreen"
-    android:title="@string/touchscreen"
-    android:summary="@string/touchscreen_toggle_summary" 
-    android:defaultValue="true"
-  />
-                          
-  <ListPreference
-   android:key="list_touchscreen_size"
-   android:dependency="toggle_use_touchscreen"
-   android:title="@string/touchscreen_icon_size"
-   android:summary="@string/touchscreen_icon_size_summary"
-   android:entries="@array/touchscreen_icon_size"
-   android:entryValues="@array/touchscreen_icon_size_values"
-   android:dialogTitle="@string/touchscreen_icon_size"
-   android:defaultValue="2"
-  />
-             
+			<ListPreference android:key="list_touchscreen_size"
+				android:dependency="toggle_use_touchscreen" 
+				android:title="@string/controls_screenkb_size"
+				android:summary=""
+				android:entries="@array/touchscreen_icon_size" android:entryValues="@array/touchscreen_icon_size_values"
+				android:dialogTitle="@string/controls_screenkb_size"
+				android:defaultValue="2" />
+			<ListPreference android:key="list_touchscreen_transparent"
+				android:dependency="toggle_use_touchscreen" android:title="@string/controls_screenkb_transparency"
+				android:summary="" android:entries="@array/touchscreen_icon_transparent"
+				android:entryValues="@array/touchscreen_icon_transparent_values"
+				android:dialogTitle="@string/controls_screenkb_transparency"
+				android:defaultValue="2" />
+				
+    		<PreferenceScreen
+                    android:title="Reposition icon"
+                    android:summary="config position of the touchscreen icon ">
+
+                <intent android:action="tk.niuzb.doom.pref"
+                        />
+
+            </PreferenceScreen>
+        </PreferenceCategory>
+
+        
+        <PreferenceCategory android:title="Hardware key">
+			<tk.niuzb.game.KeyboardConfigDialogPreference
+				android:key="keyconfig" android:title="Key binding"
+				android:summary="@string/preference_key_config_summary"
+				android:dialogLayout="@layout/key_config" android:dialogTitle="@string/preference_key_config_dialog_title"
+				android:negativeButtonText="@string/preference_key_config_dialog_cancel"
+				android:positiveButtonText="@string/preference_key_config_dialog_ok"
+				replica:leftKey="keyLeft" replica:rightKey="keyRight" replica:upKey="keyUp"
+				replica:downKey="keyDown" replica:fireKey="keyFire" replica:doorKey="keyDoor"
+				replica:tleftKey="keyTLeft" replica:trightKey="keyTRight" />
+		
+<tk.niuzb.game.YesNoDialogPreference
+        android:key="resetgame"
+        android:title="Reset key binding"
+        android:dialogMessage="Do you want to reset the key binding?" 
+        android:dialogTitle="Reset key binding"
+        android:negativeButtonText="cancel"
+        android:positiveButtonText="ok"
+/>
+
+	</PreferenceCategory>
+	<PreferenceCategory android:title="Other">
+        <Preference
+	                android:title="@string/help"
+	                android:summary="@string/help_content"
+	                android:enabled="false"
+	                android:selectable="false" />
+	</PreferenceCategory>
 </PreferenceScreen>

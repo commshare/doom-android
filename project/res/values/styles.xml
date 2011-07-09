@@ -7,7 +7,7 @@
         <item name="android:textColor">#ffd9b45d</item>
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/button</item>
-        <item name="android:layout_width">160.0dip</item>
+        <item name="android:layout_width">200.0dip</item>
         <item name="android:layout_height">46.0dip</item>
         <item name="android:layout_margin">3.0dip</item>
         <item name="android:singleLine">true</item>
