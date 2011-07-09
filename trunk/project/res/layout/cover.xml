@@ -1,66 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RelativeLayout android:background="@drawable/doom" 
-android:layout_width="fill_parent" 
-android:layout_height="fill_parent"
-  xmlns:android="http://schemas.android.com/apk/res/android">
-    
-    <LinearLayout android:gravity="center_horizontal" 
-    android:orientation="vertical" 
-    android:padding="10.0px"
-     android:layout_width="fill_parent" 
-     android:layout_height="wrap_content" 
-     android:layout_centerInParent="true">
-        <Button android:id="@+id/game_quick_start" 
-        android:text="@string/quick_start" 
-        style="@style/coverButton" />
-        <Button android:id="@+id/game_options" 
-        android:text="@string/options" 
-        style="@style/coverButton" />
-         <Button android:id="@+id/game_help" 
-        android:text="@string/help"
-         style="@style/coverButton" />
-        <Button android:id="@+id/game_exit" 
-        android:text="@string/exit"
-         style="@style/coverButton" />
-        <TextView 
-		   	android:layout_gravity="bottom|fill_horizontal" 
-		   	android:layout_width="fill_parent" 
-		   	android:layout_height="wrap_content" 
-		   	android:ellipsize="marquee" 
-		   	android:background="#99000000" 
-		   	android:textColor= "#FFFFFF" 
-		   	android:textColorHighlight="#FFFFFF" 
-		   	android:text="@string/whats_new_ticker" 
-		   	android:lines="1" 
-		   	android:marqueeRepeatLimit="marquee_forever" 
-		   	android:textSize="14sp" 
-		   	android:fadingEdge="horizontal" 
-		   	android:fadingEdgeLength="5dp" 
-		   	android:focusable="false" 
-		   	android:id="@+id/ticker"
-		   	android:singleLine="true"/>		   
+<RelativeLayout android:background="@drawable/doom"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android">
 
-    </LinearLayout>  
+	<LinearLayout android:orientation="vertical"
+		android:padding="10.0px" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:layout_centerInParent="true">
+		<LinearLayout android:orientation="vertical"
+			android:layout_width="fill_parent" android:layout_height="100dip"
+			android:layout_centerInParent="true" />
+		<Button android:id="@+id/game_quick_start" android:text="@string/quick_start"
+			android:layout_gravity="center_horizontal" style="@style/coverButton" />
+		<LinearLayout android:orientation="vertical"
+			android:layout_width="fill_parent" android:layout_height="20dip"
+			android:layout_centerInParent="true" />
+		<Button android:id="@+id/game_options" android:text="@string/options"
+			android:layout_gravity="center_horizontal" style="@style/coverButton" />
 
-<LinearLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:myapp="http://schemas.android.com/apk/res/com.xianle.doomtnt"
-android:orientation="vertical"
-android:layout_alignParentBottom="true"
 
-android:layout_width="fill_parent"
-android:layout_height="fill_parent">
-	<com.admob.android.ads.AdView
-	android:id="@+id/ad"
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	myapp:backgroundColor="#000000"
-	myapp:primaryTextColor="#FFFFFF"
-	myapp:keywords = "game 3d video music entertainment wonmen girl"
-	myapp:secondaryTextColor="#CCCCCC"
-	/>
-</LinearLayout>
+	</LinearLayout>
 
-		 
+	<LinearLayout android:id="@+id/adviewcontainer"
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:myapp="http://schemas.android.com/apk/res/com.xianle.doomtnt"
+		android:orientation="vertical" android:layout_alignParentBottom="true"
+
+		android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+	</LinearLayout>
+
+
 
 </RelativeLayout>
