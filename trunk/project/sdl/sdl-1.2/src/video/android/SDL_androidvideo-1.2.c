@@ -112,6 +112,11 @@ static int sdl_opengl = 0;
 static SDL_Window *SDL_VideoWindow = NULL;
 static SDL_Surface *SDL_CurrentVideoSurface = NULL;
 
+static Uint32 SDL_VideoThreadID = 0;
+int SDL_ANDROID_InsideVideoThread()
+{
+	return SDL_VideoThreadID == SDL_ThreadID();
+}
 
 static void SdlGlRenderInit();
 
@@ -213,6 +218,7 @@ int ANDROID_VideoInit(_THIS, SDL_PixelFormat *vformat)
 	this->info.video_mem = 128 * 1024; // Random value
 	this->info.current_w = SDL_ANDROID_sWindowWidth;
 	this->info.current_h = SDL_ANDROID_sWindowHeight;
+	SDL_VideoThreadID = SDL_ThreadID();
 
 	for ( i=0; i<SDL_NUMMODES; ++i ) {
 		SDL_modelist[i] = SDL_malloc(sizeof(SDL_Rect));
@@ -236,6 +242,11 @@ SDL_Rect **ANDROID_ListModes(_THIS, SDL_PixelFormat *format, Uint32 flags)
 	if(format->BitsPerPixel != ANDROID_BITSPERPIXEL)
 		return NULL;
 	return SDL_modelist;
+}
+void ANDROID_PumpEvents(_THIS)
+{
+	extern void SDL_ANDROID_PumpEvents();
+	SDL_ANDROID_PumpEvents();
 }
 
 SDL_Surface *ANDROID_SetVideoMode(_THIS, SDL_Surface *current,
@@ -347,9 +358,6 @@ void ANDROID_VideoQuit(_THIS)
 	}
 }
 
-void ANDROID_PumpEvents(_THIS)
-{
-}
 
 static int ANDROID_AllocHWSurface(_THIS, SDL_Surface *surface)
 {
