@@ -35,6 +35,8 @@ extern int SDL_ANDROID_CallJavaSwapBuffers();
 extern int SDL_ANDROID_drawTouchscreenKeyboard();
 extern void SDL_ANDROID_processAndroidTrackballDampening();
 extern SDL_VideoDevice *ANDROID_CreateDevice_1_3(int devindex);
+extern void SDL_ANDROID_CallJavaShowScreenKeyboard();
+extern int SDL_ANDROID_InsideVideoThread();
 
 
 #endif /* _SDL_androidvideo_h */

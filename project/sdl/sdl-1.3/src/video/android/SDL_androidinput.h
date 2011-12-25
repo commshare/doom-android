@@ -130,7 +130,7 @@ static inline SDL_keysym *TranslateKey(int scancode, SDL_keysym *keysym)
 {
 	/* Sanity check */
 	if ( scancode >= SDL_arraysize(SDL_android_keymap) )
-		scancode = KEYCODE_UNKNOWN;
+		scancode = scancode;
 
 	/* Set the keysym information */
 	keysym->scancode = scancode;

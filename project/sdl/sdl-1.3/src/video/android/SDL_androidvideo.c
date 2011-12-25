@@ -55,12 +55,24 @@ static JNIEnv* JavaEnv = NULL;
 static jclass JavaRendererClass = NULL;
 static jobject JavaRenderer = NULL;
 static jmethodID JavaSwapBuffers = NULL;
+static jmethodID JavaShowScreenKeyboard = NULL;
+static int showScreenKeyboardDeferred = 0;
 
 int SDL_ANDROID_CallJavaSwapBuffers()
 {
+	extern void SDL_ANDROID_ProcessDeferredEvents();
 	SDL_ANDROID_drawTouchscreenKeyboard();
 	SDL_ANDROID_processAndroidTrackballDampening();
-	return (*JavaEnv)->CallIntMethod( JavaEnv, JavaRenderer, JavaSwapBuffers );
+	if( ! (*JavaEnv)->CallIntMethod( JavaEnv, JavaRenderer, JavaSwapBuffers ) )
+		return 0;
+	
+	if( showScreenKeyboardDeferred )
+	{
+		showScreenKeyboardDeferred = 0;
+		(*JavaEnv)->CallVoidMethod( JavaEnv, JavaRenderer, JavaShowScreenKeyboard );
+	}
+	SDL_ANDROID_ProcessDeferredEvents();
+	return 1;
 }
 
 
@@ -93,6 +105,14 @@ JAVA_EXPORT_NAME(DemoRenderer_nativeInitJavaCallbacks) ( JNIEnv*  env, jobject t
 	JavaRendererClass = (*JavaEnv)->GetObjectClass(JavaEnv, thiz);
 	JavaSwapBuffers = (*JavaEnv)->GetMethodID(JavaEnv, JavaRendererClass, "swapBuffers", "()I");
 	
+	JavaShowScreenKeyboard = (*JavaEnv)->GetMethodID(JavaEnv, JavaRendererClass, "showScreenKeyboard", "()V");
 	ANDROID_InitOSKeymap();
 	
 }
+
+void SDL_ANDROID_CallJavaShowScreenKeyboard()
+{
+	showScreenKeyboardDeferred = 1;
+}
+
+
