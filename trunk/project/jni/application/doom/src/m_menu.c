@@ -610,7 +610,7 @@ void M_DrawNewGame(void)
 /* cph - make `New Game' restart the level in a netgame */
 static void M_RestartLevelResponse(int ch)
 {
-  if (ch != 'y')
+  if (ch != 32)
     return;
 
   if (demorecording)
@@ -647,7 +647,7 @@ void M_NewGame(int choice)
 // CPhipps - static
 static void M_VerifyNightmare(int ch)
 {
-  if (ch != 'y')
+  if (ch != 32)
     return;
 
   G_DeferedInitNew(nightmare,epi+1,1);
@@ -768,7 +768,7 @@ void M_LoadSelect(int choice)
 
 static void M_VerifyForcedLoadGame(int ch)
 {
-  if (ch=='y')
+  if (ch==32)
     G_ForcedLoadGame();
   free((char*)messageString);       // free the message strdup()'ed below
   M_ClearMenus();
@@ -1030,8 +1030,8 @@ int quitsounds2[8] =
 
 static void M_QuitResponse(int ch)
 {
-  //if (ch != 'y')
-   // return;
+  if (ch != 32)
+    return;
   if ((!netgame || demoplayback) // killough 12/98
       && !nosfxparm && snd_card) // avoid delay if no sound card
   {
@@ -1271,7 +1271,7 @@ char tempstring[80];
 
 static void M_QuickSaveResponse(int ch)
 {
-  if (ch == 'y')  {
+  if (ch == 32)  {
     M_DoSave(quickSaveSlot);
     S_StartSound(NULL,sfx_swtchx);
   }
@@ -1305,7 +1305,7 @@ void M_QuickSave(void)
 
 static void M_QuickLoadResponse(int ch)
 {
-  if (ch == 'y') {
+  if (ch == 32) {
     M_LoadSelect(quickSaveSlot);
     S_StartSound(NULL,sfx_swtchx);
   }
@@ -1337,7 +1337,7 @@ void M_QuickLoad(void)
 
 static void M_EndGameResponse(int ch)
 {
-  if (ch != 'y')
+  if (ch != 32)
     return;
 
   // killough 5/26/98: make endgame quit if recording or playing back demo
@@ -4210,7 +4210,7 @@ boolean M_Responder (event_t* ev) {
 
   if (messageToPrint) {
     if (messageNeedsInput == true &&
-  !(ch == ' ' || ch == 'n' || ch == 'y' || ch == key_escape)) // phares
+  !(ch == ','||ch == 0x9d||ch == ' ' || ch == 'n' || ch == 32 || ch == key_escape)) // phares
       return false;
 
     menuactive = messageLastMenuActive;
