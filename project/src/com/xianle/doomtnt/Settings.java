@@ -164,6 +164,9 @@ class Settings
 		Globals.PhoneHasArrowKeys = prefs.getBoolean("toggle_has_arrowkeys", true);
 		Globals.UseAccelerometerAsArrowKeys = prefs.getBoolean("toggle_use_accelerometer_as_arrowkeys", false);
 		Globals.UseTouchscreenKeyboard = prefs.getBoolean("toggle_use_touchscreen", true);
+        Globals.EnableMusic = prefs.getBoolean("enable_music", true);
+		Globals.UseDpadAsTurn = prefs.getBoolean("toggle_use_turn", 
+		false);
 		s = prefs.getString("list_touchscreen_size", "2");
 		Globals.TouchscreenKeyboardSize = Integer.parseInt(s);
         s = prefs.getString("list_touchscreen_transparent", "2");
@@ -525,13 +528,14 @@ class Settings
     			
     		} catch( SecurityException e ) {
     		} catch ( IOException e ) {}
-    		
+    		Globals.TouchscreenKeyboardTheme = Globals.UseDpadAsTurn?
+                1:0;
 			nativeSetupScreenKeyboard(	Globals.TouchscreenKeyboardSize, 
 										Globals.TouchscreenKeyboardTheme,
 										Globals.AppTouchscreenKeyboardKeysAmount, 
 										notfind,
 										Globals.TouchscreenKeyboardTransparency,iconPosition);
-			if( Globals.TouchscreenKeyboardTheme == 1 )
+			if( true )
 			{
 			
                
@@ -569,7 +573,7 @@ class Settings
 				nativeSetupScreenKeyboardButton(19, loadRaw(p, R.raw.ui_7));
 				nativeSetupScreenKeyboardButton(20, loadRaw(p, R.raw.ui_8));
 				nativeSetupScreenKeyboardButton(21, loadRaw(p, R.raw.ui_9));
-				//nativeSetupScreenKeyboardButton(22, loadRaw(p, R.raw.ui_1));
+				nativeSetupScreenKeyboardButton(22, loadRaw(p, R.raw.god));
 			}
 		}
 		nativeSetAccelerometerSensitivity(Globals.AccelerometerSensitivity);

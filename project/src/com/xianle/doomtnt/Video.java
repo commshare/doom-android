@@ -81,40 +81,65 @@ mLastTouchTime < 32) {
 			{
 
                  final long time = System.currentTimeMillis();
-                 if (event.getAction() == MotionEvent.ACTION_MOVE && time - 
+                 if ((event.getAction()& MotionEvent.ACTION_MASK) == 
+MotionEvent.ACTION_MOVE && time - 
                 mLastTouchTime < 32) {
-                    // Sleep so that the main thread doesn't get flooded with UI events.
+                
                    return;
                 }
-                mLastTouchTime = time;     
+                mLastTouchTime = time;    
 
-            
-				for( int i = 0; i < event.getPointerCount(); i++ )
-				{
-					int action = -1;
-				
-                    switch (event.getAction() & MotionEvent.ACTION_MASK) {
-                    case MotionEvent.ACTION_DOWN:
-                    case MotionEvent.ACTION_POINTER_DOWN:
-                            action = 0;
-                            break;
-                     case MotionEvent.ACTION_UP:
-                     case MotionEvent.ACTION_POINTER_UP:     
-                        action = 1;
-                        break;
-                     case MotionEvent.ACTION_MOVE:
-                        action = 2;
-                        break;
-                    }
-
-					if ( action >= 0 )
-						DemoGLSurfaceView.nativeMouse( (int)event.getX(i), 
-														(int)event.getY(i), 
-														action, 
-														event.getPointerId(i),
-														(int)(event.getPressure(i) * 1000.0),
-														(int)(event.getSize(i) * 1000.0));
-				}
+               
+					for( int i = 0; i < event.getPointerCount(); i++ )
+					{
+						int action = -1;
+					    boolean point = false;
+					    switch (event.getAction() & MotionEvent.ACTION_MASK) {
+					    case MotionEvent.ACTION_DOWN:
+					        action = 0;
+					        break;
+					    case MotionEvent.ACTION_POINTER_DOWN:
+					        point = true;
+					        action = 0;
+					        break;
+					     case MotionEvent.ACTION_UP:
+					        action = 1;
+					        break;
+					     case MotionEvent.ACTION_POINTER_UP:     
+					        point = true;
+					        action = 1;
+					        break;
+					     case MotionEvent.ACTION_MOVE:
+					        action = 2;
+					        break;
+					    }
+					    int pid = event.getPointerId(i);
+					    int act = event.getAction();
+					    int id = act >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+					   
+						try {
+							if (((point && pid == id)||!point) && action >= 0 ) {
+							   // Log.v("Supertux", "pid:"+pid+", id:"+id+" action:"+action);
+								DemoGLSurfaceView.nativeMouse( (int)event.getX(pid), 
+																(int)event.getY(pid), 
+																action, 
+																event.getPointerId(i),
+																(int)(event.getPressure(pid) * 1000.0),
+																(int)(event.getSize(pid) * 
+																1000.0));
+							}
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							DemoGLSurfaceView.nativeMouse( (int)event.getX(0), 
+									(int)event.getY(0), 
+									action, 
+									0,
+									(int)(event.getPressure(pid) * 1000.0),
+									(int)(event.getSize(0) * 
+									1000.0));
+						}
+					
+				} 
 			}
 		}
 	}
@@ -122,7 +147,7 @@ mLastTouchTime < 32) {
 
 class DemoRenderer extends GLSurfaceView_SDL.Renderer {
 
-	public DemoRenderer(Activity _context)
+	public DemoRenderer(MainActivity _context)
 	{
 		context = _context;
 	}
@@ -150,7 +175,10 @@ class DemoRenderer extends GLSurfaceView_SDL.Renderer {
 		// Tweak video thread priority, if user selected big audio buffer
 		if(Globals.AudioBufferConfig >= 2)
 			Thread.currentThread().setPriority( (Thread.NORM_PRIORITY + Thread.MIN_PRIORITY) / 2 ); // Lower than normal
-		nativeInit("-iwad "+Globals.wadFile); // Calls main() and never returns, hehe - we'll call eglSwapBuffers() from native code
+		String param = "-iwad "+Globals.wadFile;
+		if(!Globals.EnableMusic)
+			param = param+" -nosound";
+		nativeInit(param); // Calls main() and never returns, hehe - we'll call eglSwapBuffers() from native code
 		System.exit(0); // The main() returns here - I don't bother with deinit stuff, just terminate process
 	}
 
@@ -162,6 +190,20 @@ class DemoRenderer extends GLSurfaceView_SDL.Renderer {
 		//Thread.yield();
 		return super.SwapBuffers() ? 1 : 0;
 	}
+  
+	public void showScreenKeyboard() // Called from native code
+	{
+		class Callback implements Runnable {
+			public MainActivity parent;
+
+			public void run() {
+				parent.showScreenKeyboard();
+			}
+		}
+		Callback cb = new Callback();
+		cb.parent = context;
+		context.runOnUiThread(cb);
+	}
 
 	public void exitApp() {
 		 nativeDone();
@@ -171,8 +213,9 @@ class DemoRenderer extends GLSurfaceView_SDL.Renderer {
 	private native void nativeInit(String CommandLine);
 	private native void nativeResize(int w, int h);
 	private native void nativeDone();
+	public static native void nativeTextInput(int ascii, int unicode);
 
-	private Activity context = null;
+	private MainActivity context = null;
 	
 	private EGL10 mEgl = null;
 	private EGLDisplay mEglDisplay = null;
@@ -181,7 +224,7 @@ class DemoRenderer extends GLSurfaceView_SDL.Renderer {
 }
 
 class DemoGLSurfaceView extends GLSurfaceView_SDL {
-	public DemoGLSurfaceView(Activity context) {
+	public DemoGLSurfaceView(MainActivity context) {
 		super(context);
 		mParent = context;
 		touchInput = DifferentTouchInput.getInstance();
@@ -244,7 +287,7 @@ class DemoGLSurfaceView extends GLSurfaceView_SDL {
 	 }
 
 	DemoRenderer mRenderer;
-	Activity mParent;
+	MainActivity mParent;
 	AccelerometerReader accelerometer = null;
 	DifferentTouchInput touchInput = null;
 
