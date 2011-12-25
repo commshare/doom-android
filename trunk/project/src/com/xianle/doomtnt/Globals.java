@@ -11,7 +11,7 @@ public class Globals {
 	public static String outFilesDir = "/sdcard/doom";
 	public static String wadFile = "doom1.wad";
 	public static String fileExistFlag = "doomshare.flag";
-	public static int VERSION = 0x42;
+	public static int VERSION = 0x45;
 	// Should be zip file
 	public static String DataDownloadUrl = "game is 12m|http://fuck.com/text.zip^n";
 	public static boolean NeedDepthBuffer = false;
@@ -41,8 +41,11 @@ public class Globals {
 	public static boolean PhoneHasTrackball = true;
 	public static boolean PhoneHasArrowKeys = true;
 	public static boolean UseAccelerometerAsArrowKeys = false;
+	public static boolean EnableMusic = true; //options for music 2011.11.2
     public static int TileSensitive = 2;
 	public static boolean UseTouchscreenKeyboard = true;//edited by niuzb
+	//added for change dapad left /right funciton to turn or strafe
+	public static boolean UseDpadAsTurn = false; 
 	public static int TouchscreenKeyboardSize = 1;
 	public static int TouchscreenKeyboardTransparency=2;
 	public static int TouchscreenKeyboardTheme = 1;
@@ -89,38 +92,38 @@ public class Globals {
        return false;
     }
 	public static int TranslateScancode(int code, boolean pressed) {
-		int ret = code;
-		/*do not remap back key*/
-		if(code == KeyEvent.KEYCODE_BACK ||
+	 int ret = code;
+                /*do not remap back key*/
+                if(code == KeyEvent.KEYCODE_BACK ||
             code == KeyEvent.KEYCODE_MENU)
-			return code;
-		if(code == Globals.leftKey)
-			ret = KeyEvent.KEYCODE_Q;
-		else if(code == Globals.rightKey)
-			ret =  KeyEvent.KEYCODE_E;
-		else if(code == Globals.upKey)
-			ret =  KeyEvent.KEYCODE_W;
-		else if(code == Globals.downKey)
-			ret = KeyEvent.KEYCODE_S;
-		else if(code == Globals.fireKey)
-			ret = KeyEvent.KEYCODE_J;
-		else if(code == Globals.doorKey) {
-			if(!pressed) {
-			ret =  current_key++;
-			} else {
-				ret = current_key;
-			}
-			if(current_key > KeyEvent.KEYCODE_9)
-				current_key = KeyEvent.KEYCODE_1;
-		}else if(code == Globals.tleftKey)
-			ret = KeyEvent.KEYCODE_A;
-		else if(code == Globals.trightKey)
-			ret =  KeyEvent.KEYCODE_D;
-		
-		if(ret != code) {
-//			Log.v("doom", "origin code:"+ code + "tran:"+ret);
-		}
-		return ret;
+                        return code;
+                if(code == Globals.leftKey)
+                        ret = KeyEvent.KEYCODE_DPAD_LEFT;
+                else if(code == Globals.rightKey)
+                        ret =  KeyEvent.KEYCODE_DPAD_RIGHT;
+                else if(code == Globals.upKey)
+                        ret =  KeyEvent.KEYCODE_DPAD_UP;
+                else if(code == Globals.downKey)
+                        ret = KeyEvent.KEYCODE_DPAD_DOWN;
+                else if(code == Globals.fireKey)
+                        ret = KeyEvent.KEYCODE_BUTTON_Y;
+                else if(code == Globals.doorKey) {
+                        if(!pressed) {
+                        ret =  current_key++;
+                        } else {
+                                ret = current_key;
+                        }
+                        if(current_key > KeyEvent.KEYCODE_9)
+                                current_key = KeyEvent.KEYCODE_1;
+                }else if(code == Globals.tleftKey)
+                        ret = KeyEvent.KEYCODE_BUTTON_L1;
+                else if(code == Globals.trightKey)
+                        ret =  KeyEvent.KEYCODE_BUTTON_R1;
+                
+                if(ret != code) {
+//                      Log.v("doom", "origin code:"+ code + "tran:"+ret);
+                }
+                return ret;
 	}
 }
 
