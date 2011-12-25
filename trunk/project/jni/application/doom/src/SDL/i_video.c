@@ -141,7 +141,7 @@ static int I_TranslateKey(SDL_keysym* key)
   case SDLK_KP_ENTER: rc = KEYD_KEYPADENTER;  break;
   case SDLK_KP_PERIOD:  rc = KEYD_KEYPADPERIOD; break;
   case SDLK_LSHIFT:
-  case SDLK_RSHIFT: rc = 106; break;//edit by niuzb , default is KEYD_RSHIFT
+  case SDLK_RSHIFT: rc = KEYD_RSHIFT; break;//edit by niuzb , default is KEYD_RSHIFT
   case SDLK_LCTRL:
   case SDLK_RCTRL:  rc = KEYD_RCTRL;  break;
   case SDLK_LALT:
