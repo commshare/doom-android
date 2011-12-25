@@ -57,8 +57,9 @@ enum { FONT_CHAR_LINES_COUNT = FONT_MAX_LINES_PER_CHAR * 4 };
 enum { MAX_BUTTONS = SDL_ANDRIOD_SCREENKEYBOARD_BUTTON_MAX, MAX_BUTTONS_AUTOFIRE = 2 } ; // Max amount of custom buttons
 
 int SDL_ANDROID_isTouchscreenKeyboardUsed = 0;
-static int touchscreenKeyboardTheme = 0;
+static int touchscreenKeyboardTheme = 1;
 static int touchscreenKeyboardShown = 1;
+static int DpadAsturn = 0;//if use dpad left/right direction to turn charactor
 static int AutoFireButtonsNum = 0;
 static int nbuttons = 4;
 static int buttonsize = 1;
@@ -70,27 +71,26 @@ static int transparency = 128;
 //buttons:store 4 icon. open door, fire, show gun, show map
 static SDL_Rect arrows, turn[2], buttons[MAX_BUTTONS];
 static SDLKey buttonKeysyms[MAX_BUTTONS] = { 
-#if 0 
-  //edit by niuzb for doom
-SDL_KEY(SDL_KEY_VAL(SDL_ANDROID_KEYCODE_0)),
-SDL_KEY(SDL_KEY_VAL(SDL_ANDROID_KEYCODE_1)),
-SDL_KEY(SDL_KEY_VAL(SDL_ANDROID_KEYCODE_2)),
-SDL_KEY(SDL_KEY_VAL(SDL_ANDROID_KEYCODE_3)),
-#else
-0x20,//open door
+SDL_KEY(SPACE),//open door
 0x30,//chang weapon
 9,//tab...map
-//0x9d,//fire
-SDL_KEY(J),//j fire
+SDL_KEY(RCTRL),//j fire
 
-
-#endif
 // 4 and 5 are MENU and BACK, always available as HW keys
 SDL_KEY(SDL_KEY_VAL(SDL_ANDROID_KEYCODE_6)),
 SDL_KEY(SDL_KEY_VAL(SDL_ANDROID_KEYCODE_7)),
 SDL_KEY(SDL_KEY_VAL(SDL_ANDROID_KEYCODE_8))
 };
 
+static SDLKey arrowKey[] = {
+	SDL_KEY(LEFT),//left
+	SDL_KEY(RIGHT),//right
+	SDL_KEY(UP),//up
+	SDL_KEY(DOWN),//down
+	SDL_KEY(COMMA),//strafe left
+	SDL_KEY(PERIOD),//strafe right
+
+};
 enum { ARROW_LEFT = 1, ARROW_RIGHT = 2, ARROW_UP = 4, ARROW_DOWN = 8 };
 static int oldArrows = 0;
 static int oldTurn = 0;
@@ -110,7 +110,7 @@ typedef struct
 //0 store dpad, 1 store left right
 static GLTexture_t arrowImages[5] = { {0, 0, 0}, };
 static GLTexture_t buttonAutoFireImages[MAX_BUTTONS_AUTOFIRE*2] = { {0, 0, 0}, };
-static GLTexture_t buttonImages[MAX_BUTTONS*2] = { {0, 0, 0}, };
+static GLTexture_t buttonImages[20] = { {0, 0, 0}, };
 //conrol if we show the gun number
 static int show_gun = 0;
 //record witch gun is choosen now
@@ -335,12 +335,12 @@ int SDL_ANDROID_drawTouchscreenKeyboard()
     if(show_gun) {
           int i;
           SDL_Rect gun_position={0, 0, 32, 32};
-          int tap = (SDL_ANDROID_sWindowWidth-32*9)/9;
+          int tap = (SDL_ANDROID_sWindowWidth-32*10)/10;
           
-          for(i = 0; i < 9; i++) {
+          for(i = 0; i < 10; i++) {
             gun_position.x = tap/2+(32+tap)*i;
             drawCharTex(&buttonImages[i+4],
-							NULL, &gun_position, 255, 255, 255, 255 );
+							NULL, &gun_position, 255, 255, 255, 128 );
           }
           
     }
@@ -395,26 +395,70 @@ static inline int ArrowKeysPressed(int x, int y)
 
 void SDL_ANDROID_reset_arrow_key() {
   SDL_keysym keysym;
-  SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(W), &keysym) );
-  SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(S), &keysym) );
-  SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(Q), &keysym) );
-  SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(E), &keysym) );
+  SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym(  arrowKey[2], &keysym) );
+  SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym(  arrowKey[3], &keysym) );
+  if(DpadAsturn == 0) {
+	SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym(  arrowKey[4], &keysym) );
+	SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym(  arrowKey[5], &keysym) );
+  } else {
+	SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym(  arrowKey[0], &keysym) );
+	SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym(  arrowKey[1], &keysym) );
+  }
+  
 
 }
 
 //weather usr touch the gun number, retern the number 
 int SDL_ANDROID_get_number(int x, int y) {
   int num = -1;
-  int tap = (SDL_ANDROID_sWindowWidth-32*9)/9;
+  int tap = (SDL_ANDROID_sWindowWidth-32*10)/10;
 
   if(y < 32) {
     num = 1+ x/(tap+32);
   }
   return num;
 }
+
+
+//DpadAsturn
 //#define SDL_SendKeyboardKey_TURN
 //store the tick at whitch last move touch occur 
-long last_move_tick = 0;
+//use for dapd left/right dir icon
+void SDL_send_dpad_key_event(int press, int dir) {
+	SDL_keysym keysym;
+
+	if(DpadAsturn == 1) {
+		if(dir == ARROW_LEFT) 
+			SDL_SendKeyboardKey( press, GetKeysym( arrowKey[0], &keysym) );
+		else
+			SDL_SendKeyboardKey( press, GetKeysym( arrowKey[1], &keysym) );
+	} else if(DpadAsturn == 0) {
+		if(dir == ARROW_LEFT) 
+			SDL_SendKeyboardKey( press, GetKeysym( arrowKey[4], &keysym) );
+		else
+			SDL_SendKeyboardKey( press, GetKeysym( arrowKey[5], &keysym) );
+
+		}
+}
+
+//used for turn icon
+void SDL_send_turn_key_event(int press, int dir) {
+	SDL_keysym keysym;
+
+	if(DpadAsturn == 0) {
+		if(dir == ARROW_LEFT) 
+			SDL_SendKeyboardKey( press, GetKeysym( arrowKey[0], &keysym) );
+		else
+			SDL_SendKeyboardKey( press, GetKeysym( arrowKey[1], &keysym) );
+	} else if(DpadAsturn == 1) {
+		if(dir == ARROW_LEFT) 
+			SDL_SendKeyboardKey( press, GetKeysym( arrowKey[4], &keysym) );
+		else
+			SDL_SendKeyboardKey( press, GetKeysym( arrowKey[5], &keysym) );
+
+	}
+}
+
 int SDL_ANDROID_processTouchscreenKeyboard(int x, int y, int action, int pointerId)
 {
 	int i;
@@ -434,7 +478,6 @@ int SDL_ANDROID_processTouchscreenKeyboard(int x, int y, int action, int pointer
 		//do the move stuff
 		if( InsideRect( &arrows, x, y ) )
 		{
-			//用户点到了方向控制面板中间的小圆
 			OldCoords[pointerId] = &arrows;
 			//i = ArrowKeysPressed(x, y);
 			i = ArrowKeysPressed(x, y);
@@ -443,23 +486,22 @@ int SDL_ANDROID_processTouchscreenKeyboard(int x, int y, int action, int pointer
 			
 			 SDL_ANDROID_reset_arrow_key();
 			 if( i & ARROW_UP ) {
-			   SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(W), &keysym) );
+			   SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( arrowKey[2], &keysym) );
+			   
 			 }
 			 if( i & ARROW_DOWN ) {
-			   SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(S), &keysym) );
+			   SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym(arrowKey[3], &keysym) );
+			  
 			 }
 			 if( i & ARROW_LEFT ) {
-			 	if(oldTurn == 0)
-			   		SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(Q), &keysym) );
-				else
-					SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(A), &keysym) );
+			   		//SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(Q), &keysym) );
+			   		SDL_send_dpad_key_event(SDL_PRESSED, ARROW_LEFT);
+				 
 			 }
 			 if( i & ARROW_RIGHT ) {
-			 	if(oldTurn == 0)
-				   SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(E), &keysym) );
-				else
-				   SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(D), &keysym) );
-				
+				   //SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(E), &keysym) );
+					SDL_send_dpad_key_event(SDL_PRESSED, ARROW_RIGHT);
+				 
 			 }
 			 oldArrows = i;
 			//__android_log_print(ANDROID_LOG_INFO, "doom", "down arrow %d",pointerId);
@@ -472,14 +514,22 @@ int SDL_ANDROID_processTouchscreenKeyboard(int x, int y, int action, int pointer
 			
 			
 			//we do not use this icon to turn
-			SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(A), &keysym) );
-			SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(D), &keysym) );
+			if(DpadAsturn == 1) {
+				
+			 SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( arrowKey[4], &keysym) );
+			 SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( arrowKey[5], &keysym) );
+			} else {
+			SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( arrowKey[0], &keysym) );
+			 SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( arrowKey[1], &keysym) );
+			}
 			if(x < turn[0].x+turn[0].w/2) {
-				SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(A), &keysym) );
+				//SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(A), &keysym) );
+				SDL_send_turn_key_event(SDL_PRESSED, ARROW_LEFT);
 				oldTurn = 1;
 			}
 			else { 
-				SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(D), &keysym) );
+				//SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(D), &keysym) );
+				SDL_send_turn_key_event(SDL_PRESSED, ARROW_RIGHT);
 				oldTurn = 2;
 			}
 			
@@ -498,11 +548,28 @@ int SDL_ANDROID_processTouchscreenKeyboard(int x, int y, int action, int pointer
 	      int num = SDL_ANDROID_get_number(x, y);
 	      
 	      if (num > 0) {
+	        //__android_log_print(ANDROID_LOG_INFO, "libSDL", "pressed num:%d", pressed_num);
+	        if(num == 10) {
+#if 0
+				//god mode
+#define sendkey(x) \
+	do {\
+		SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(x), &keysym) );\
+		SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(x), &keysym) );\
+	}while(0)
+				sendkey(I);
+				sendkey(D);
+				sendkey(D);
+				sendkey(Q);
+				sendkey(D);
+#endif
+				SDL_ANDROID_ToggleScreenKeyboardTextInput();
+				return 1;
+			}
+			
 		  	//change the gun
 	        pressed_num = num;
 	        OldCoords[pointerId] = &pressed_num;
-	        //__android_log_print(ANDROID_LOG_INFO, "libSDL", "pressed num:%d", pressed_num);
-	        
 	        GetKeysym( SDL_KEY(0), &keysym);
 	        keysym.scancode += num;
 	        keysym.sym += num;
@@ -559,8 +626,13 @@ int SDL_ANDROID_processTouchscreenKeyboard(int x, int y, int action, int pointer
 		} else if( OldCoords[pointerId] == &turn[0]) //stop turn left
 		{
 			OldCoords[pointerId] = NULL;
-			SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(A), &keysym) );
-			SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(D), &keysym) );
+			if(DpadAsturn == 1) {
+			  SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( arrowKey[4], &keysym) );
+			  SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( arrowKey[5], &keysym) );
+			} else {
+			  SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( arrowKey[1], &keysym) );
+			  SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( arrowKey[0], &keysym) );
+			}
 			oldTurn = 0;
 			//__android_log_print(ANDROID_LOG_INFO, "doom", "up turn %d",pointerId);
 			return 1;
@@ -636,39 +708,29 @@ int SDL_ANDROID_processTouchscreenKeyboard(int x, int y, int action, int pointer
 		
 
 		if( oldArrows & ARROW_UP && ! (i & ARROW_UP) )
-			SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(W), &keysym) );
+			SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( arrowKey[2], &keysym) );
 		if( oldArrows & ARROW_DOWN && ! (i & ARROW_DOWN) )
-			SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(S), &keysym) );
+			SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( arrowKey[3], &keysym) );
 		if( oldArrows & ARROW_LEFT && ! (i & ARROW_LEFT) ) {
-			if(oldTurn == 0)
-			   SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(Q), &keysym) );
-			else
-			   SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(A), &keysym) );
+			   //SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(Q), &keysym) );
+			   SDL_send_dpad_key_event(SDL_RELEASED, ARROW_LEFT);
 		}
 		if( oldArrows & ARROW_RIGHT && ! (i & ARROW_RIGHT) ) {
-			if(oldTurn == 0)
-			   SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(E), &keysym) );
-			else
-			   SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(D), &keysym) );
+			   //SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(E), &keysym) );
+			   SDL_send_dpad_key_event(SDL_RELEASED, ARROW_RIGHT);
 
 		}
 		if( i & ARROW_UP )
-			SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(W), &keysym) );
+			SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( arrowKey[2], &keysym) );
 		if( i & ARROW_DOWN )
-			SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(S), &keysym) );
+			SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( arrowKey[3], &keysym) );
 		if( i & ARROW_LEFT ) {
-			if(oldTurn == 0)
-			   SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(Q), &keysym) );
-			else
-			   SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(A), &keysym) );
-			
+			   //SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(Q), &keysym) );
+			SDL_send_dpad_key_event(SDL_PRESSED, ARROW_LEFT);
 		}
 		if( i & ARROW_RIGHT ) {
-			if(oldTurn == 0)
-			   SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(E), &keysym) );
-			else
-			   SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(D), &keysym) );
-			
+			  // SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(E), &keysym) );
+			SDL_send_dpad_key_event(SDL_PRESSED, ARROW_RIGHT);
 		}
 		oldArrows = i;
 	} else if( OldCoords[pointerId] == &turn[0]) //read turn left icon
@@ -678,11 +740,15 @@ int SDL_ANDROID_processTouchscreenKeyboard(int x, int y, int action, int pointer
 		if( i == oldTurn)
 			return 1;
 		if(oldTurn == 1 && i == 2) {
-			SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(A), &keysym) );
-			SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(D), &keysym) );
+			//SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(A), &keysym) );
+			//SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(D), &keysym) );
+			SDL_send_turn_key_event(SDL_RELEASED, ARROW_LEFT);
+			SDL_send_turn_key_event(SDL_PRESSED, ARROW_RIGHT);
 		} else if(oldTurn == 2 && i == 1) {
-			SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(D), &keysym) );
-			SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(A), &keysym) );
+			//SDL_SendKeyboardKey( SDL_RELEASED, GetKeysym( SDL_KEY(D), &keysym) );
+			//SDL_SendKeyboardKey( SDL_PRESSED, GetKeysym( SDL_KEY(A), &keysym) );
+			SDL_send_turn_key_event(SDL_RELEASED, ARROW_RIGHT);
+			SDL_send_turn_key_event(SDL_PRESSED, ARROW_LEFT);
 
 		}
 		oldTurn =  i;
@@ -746,13 +812,15 @@ int SDL_ANDROID_processTouchscreenKeyboard(int x, int y, int action, int pointer
 
 
 JNIEXPORT void JNICALL 
-JAVA_EXPORT_NAME(Settings_nativeSetupScreenKeyboard) ( JNIEnv*  env, jobject thiz, jint size, jint theme, jint _nbuttons, 
+JAVA_EXPORT_NAME(Settings_nativeSetupScreenKeyboard) ( JNIEnv*  env, jobject thiz, jint size, jint tt, jint _nbuttons, 
 jint array_invalide, jint _transparency, jintArray arr )
 {
 	int i, ii;
 	int nbuttons1row, nbuttons2row;
 	nbuttons = _nbuttons;
-	touchscreenKeyboardTheme = theme;
+//	touchscreenKeyboardTheme = theme;
+	DpadAsturn = tt;
+
 	if( nbuttons > MAX_BUTTONS )
 		nbuttons = MAX_BUTTONS;
 	//AutoFireButtonsNum = nbuttonsAutoFire;
@@ -760,7 +828,8 @@ jint array_invalide, jint _transparency, jintArray arr )
 		AutoFireButtonsNum = MAX_BUTTONS_AUTOFIRE;
 	// TODO: works for horizontal screen orientation only!
 	buttonsize = size;
-	
+	#if 0 
+	//no need to just trasparency
 	switch(_transparency)
 	{
 		case 0: transparency = 16; break;
@@ -770,6 +839,7 @@ jint array_invalide, jint _transparency, jintArray arr )
 		case 4: transparency = 192; break;
 		default: transparency = 128; break;
 	}
+	#endif
 	if(array_invalide)
 	{
 	__android_log_print(ANDROID_LOG_INFO, "doom", "use default icon");
@@ -847,9 +917,11 @@ jint array_invalide, jint _transparency, jintArray arr )
 		   }while(0)
 		 for (i=0; i<len; i+=4) {
 		 	if(i==0) {
-				SETRect(arrows);}
+				SETRect(arrows);
+			}
 			else if(i==4){
-				SETRect(turn[0]);}
+				SETRect(turn[0]);
+			}
 			else {
 				SETRect(buttons[(i-8)/4]);
 			}
@@ -1024,3 +1096,10 @@ int SDL_ANDROID_GetScreenKeyboardSize()
 {
 	return buttonsize;
 };
+
+int SDL_ANDROID_ToggleScreenKeyboardTextInput()
+{
+	SDL_ANDROID_CallJavaShowScreenKeyboard();
+	return 1;
+};
+
