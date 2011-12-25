@@ -903,6 +903,8 @@ struct default_s *M_LookupDefault(const char *name)
 //
 // M_LoadDefaults
 //
+#include <android/log.h>
+#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "doom", __VA_ARGS__))
 
 #define NUMCHATSTRINGS 10 // phares 4/13/98
 
@@ -979,6 +981,7 @@ void M_LoadDefaults (void)
         } else if ((strparm[0] == '0') && (strparm[1] == 'x')) {
           // CPhipps - allow ints to be specified in hex
           sscanf(strparm+2, "%x", &parm);
+		 // LOGI("%s    %x\n",def, parm);
         } else {
                 sscanf(strparm, "%i", &parm);
           // Keycode hack removed
