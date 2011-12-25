@@ -130,12 +130,12 @@ public class TouchReposition extends Activity {
         	try {
 				ObjectOutputStream out = new ObjectOutputStream(c
 						.openFileOutput(CONFIG_FILE, c.MODE_WORLD_READABLE));
-				Log.v("doom", "saveConfig  size:"+sRect.size());
+				Log.v("quake", "saveConfig  size:"+sRect.size());
 				Iterator<Rect> i = sRect.iterator();
 	        	Rect temp;
 	        	while(i.hasNext()) {
 	        		temp = i.next();
-	        		Log.v("doom", "save "+temp.toString());
+	        		Log.v("quake", "save "+temp.toString());
 	        		out.writeInt(temp.left);
 	        		out.writeInt(temp.top);
 	        		out.writeInt(temp.right);
